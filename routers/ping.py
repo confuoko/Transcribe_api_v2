@@ -5,7 +5,15 @@ from services.transcribe_service import processFile
 import boto3
 import os
 from tempfile import NamedTemporaryFile
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+
 router = APIRouter()
+
+
 
 @router.get("/ping", summary="Ping-Pong API", tags=["Health Check"])
 def ping():
@@ -24,6 +32,7 @@ def process_audio(request: AudioRequest):
     """
     Обрабатывает аудио-ссылку и возвращает подтверждение.
     """
+    """
     bucket_name = "audiotest"
     file_key = request.audio_url
 
@@ -33,7 +42,19 @@ def process_audio(request: AudioRequest):
                       aws_access_key_id='admin',
                       aws_secret_access_key='adminpassword',
                       region_name='us-east-1')
+    """
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 
+    bucket_name = "whisper-audiotest"
+    file_key = request.audio_url
+
+    # Создаем сессию для подключения к MinIO через S3 API
+    s3 = boto3.client('s3',
+                      endpoint_url="http://storage.yandexcloud.net",
+                      aws_access_key_id=AWS_ACCESS_KEY_ID,
+                      aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+                      )
     # Загружаем файл из S3 в временный файл
     file_obj = s3.get_object(Bucket=bucket_name, Key=file_key)
 
