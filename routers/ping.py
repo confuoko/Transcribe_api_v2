@@ -6,14 +6,32 @@ import boto3
 import os
 from tempfile import NamedTemporaryFile
 from dotenv import load_dotenv
-
+import torch
 load_dotenv()
+
+
+if torch.cuda.is_available():
+    print("✅ CUDA доступна (используется GPU)")
+else:
+    print("❌ CUDA недоступна (используется CPU)")
 
 
 
 router = APIRouter()
 
 
+@router.get("/cpu", summary="Ping-Pong API", tags=["Health Check"])
+def ping():
+    """
+    Простая проверка доступности сервиса.
+    Возвращает 'pong' и информацию об устройстве.
+    """
+    if torch.cuda.is_available():
+        answer = "✅ CUDA доступна (используется GPU)"
+    else:
+        answer = "❌ CUDA недоступна (используется CPU)"
+
+    return {"message": answer}
 
 @router.get("/ping", summary="Ping-Pong API", tags=["Health Check"])
 def ping():
