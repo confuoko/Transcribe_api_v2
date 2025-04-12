@@ -47,20 +47,7 @@ class AudioRequest(BaseModel):
 
 @router.post("/audio", summary="Принять ссылку на аудио", tags=["Audio"])
 def process_audio(request: AudioRequest):
-    """
-    Обрабатывает аудио-ссылку и возвращает подтверждение.
-    """
-    """
-    bucket_name = "audiotest"
-    file_key = request.audio_url
 
-    # Создаем сессию для подключения к MinIO через S3 API
-    s3 = boto3.client('s3',
-                      endpoint_url='http://127.0.0.1:9000',
-                      aws_access_key_id='admin',
-                      aws_secret_access_key='adminpassword',
-                      region_name='us-east-1')
-    """
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 
